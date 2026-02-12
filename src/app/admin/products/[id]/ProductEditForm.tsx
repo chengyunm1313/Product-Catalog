@@ -7,7 +7,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import type { JSONContent } from '@tiptap/react';
 import type { Product } from '@/types';
+import TiptapEditor from '@/components/editor/TiptapEditor';
 import styles from '../../form.module.css';
 
 interface Props {
@@ -21,6 +23,9 @@ export default function ProductEditForm({ product }: Props) {
 	const [error, setError] = useState('');
 	const [specs, setSpecs] = useState<{ key: string; value: string }[]>(
 		Object.entries(product.specs || {}).map(([key, value]) => ({ key, value }))
+	);
+	const [descriptionJson, setDescriptionJson] = useState<JSONContent>(
+		product.descriptionJson || { type: 'doc', content: [{ type: 'paragraph' }] }
 	);
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,6 +53,7 @@ export default function ProductEditForm({ product }: Props) {
 					.map((t) => t.trim())
 					.filter(Boolean) || [],
 			specs: specsObj,
+			descriptionJson,
 			seo: {
 				title: form.get('seoTitle') || '',
 				description: form.get('seoDescription') || '',
@@ -115,6 +121,11 @@ export default function ProductEditForm({ product }: Props) {
 				<div className={styles.formGroup}>
 					<label>標籤（以逗號分隔）</label>
 					<input name='tags' defaultValue={product.tags?.join(', ')} />
+				</div>
+
+				<div className={styles.formGroup}>
+					<label>產品描述</label>
+					<TiptapEditor content={descriptionJson} onChange={setDescriptionJson} />
 				</div>
 
 				{/* 產品規格 */}

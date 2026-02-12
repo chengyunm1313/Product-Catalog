@@ -7,6 +7,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import type { JSONContent } from '@tiptap/react';
+import TiptapEditor from '@/components/editor/TiptapEditor';
 import styles from '../../form.module.css';
 
 export default function NewProductPage() {
@@ -14,6 +16,10 @@ export default function NewProductPage() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
 	const [specs, setSpecs] = useState<{ key: string; value: string }[]>([]);
+	const [descriptionJson, setDescriptionJson] = useState<JSONContent>({
+		type: 'doc',
+		content: [{ type: 'paragraph' }],
+	});
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -39,6 +45,7 @@ export default function NewProductPage() {
 					.map((t) => t.trim())
 					.filter(Boolean) || [],
 			specs: specsObj,
+			descriptionJson,
 			seo: {
 				title: form.get('seoTitle') || `${form.get('name')} — Brand`,
 				description: form.get('seoDescription') || '',
@@ -105,6 +112,11 @@ export default function NewProductPage() {
 				<div className={styles.formGroup}>
 					<label>標籤（以逗號分隔）</label>
 					<input name='tags' placeholder='例如：感測器, 工業級, 溫濕度' />
+				</div>
+
+				<div className={styles.formGroup}>
+					<label>產品描述</label>
+					<TiptapEditor content={descriptionJson} onChange={setDescriptionJson} />
 				</div>
 
 				{/* 產品規格 */}

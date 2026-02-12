@@ -1,5 +1,9 @@
 /**
- * Tiptap 編輯器（Client Component）
+ * Tiptap 富文本編輯器（Client Component）
+ *
+ * 支援格式：粗體、斜體、刪除線、行內程式碼、
+ * 標題 H1-H3、無序/有序列表、引言、分隔線、連結、圖片
+ * 底部顯示即時字數統計
  */
 
 'use client';
@@ -11,6 +15,8 @@ import ImageExtension from '@tiptap/extension-image';
 import {
 	Bold,
 	Italic,
+	Strikethrough,
+	Code,
 	Heading1,
 	Heading2,
 	Heading3,
@@ -18,6 +24,8 @@ import {
 	Image as ImageIcon,
 	List,
 	ListOrdered,
+	Quote,
+	Minus,
 	Undo,
 	Redo,
 } from 'lucide-react';
@@ -42,16 +50,21 @@ export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
 		onUpdate: ({ editor }) => {
 			onChange(editor.getJSON());
 		},
+		immediatelyRender: false,
 	});
 
 	if (!editor) return null;
 
 	/** 新增連結 */
 	const setLink = () => {
-		const url = prompt('請輸入連結 URL：');
-		if (url) {
-			editor.chain().focus().setLink({ href: url }).run();
+		const previousUrl = editor.getAttributes('link').href;
+		const url = prompt('請輸入連結 URL：', previousUrl || 'https://');
+		if (url === null) return; // 取消
+		if (url === '') {
+			editor.chain().focus().unsetLink().run();
+			return;
 		}
+		editor.chain().focus().setLink({ href: url }).run();
 	};
 
 	/** 新增圖片 */
@@ -62,10 +75,19 @@ export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
 		}
 	};
 
+	/** 字數統計 */
+	const text = editor.getText();
+	const charCount = text.length;
+	const wordCount = text
+		.trim()
+		.split(/\s+/)
+		.filter((w) => w.length > 0).length;
+
 	return (
 		<div className='tiptap-editor'>
 			{/* 工具列 */}
 			<div className='tiptap-toolbar'>
+				{/* 文字格式 */}
 				<button
 					onClick={() => editor.chain().focus().toggleBold().run()}
 					className={editor.isActive('bold') ? 'is-active' : ''}
@@ -82,6 +104,26 @@ export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
 				>
 					<Italic size={16} />
 				</button>
+				<button
+					onClick={() => editor.chain().focus().toggleStrike().run()}
+					className={editor.isActive('strike') ? 'is-active' : ''}
+					title='刪除線'
+					type='button'
+				>
+					<Strikethrough size={16} />
+				</button>
+				<button
+					onClick={() => editor.chain().focus().toggleCode().run()}
+					className={editor.isActive('code') ? 'is-active' : ''}
+					title='行內程式碼'
+					type='button'
+				>
+					<Code size={16} />
+				</button>
+
+				<span className='tiptap-toolbar-divider' />
+
+				{/* 標題 */}
 				<button
 					onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
 					className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
@@ -106,6 +148,10 @@ export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
 				>
 					<Heading3 size={16} />
 				</button>
+
+				<span className='tiptap-toolbar-divider' />
+
+				{/* 列表與區塊 */}
 				<button
 					onClick={() => editor.chain().focus().toggleBulletList().run()}
 					className={editor.isActive('bulletList') ? 'is-active' : ''}
@@ -122,22 +168,61 @@ export default function TiptapEditor({ content, onChange }: TiptapEditorProps) {
 				>
 					<ListOrdered size={16} />
 				</button>
+				<button
+					onClick={() => editor.chain().focus().toggleBlockquote().run()}
+					className={editor.isActive('blockquote') ? 'is-active' : ''}
+					title='引言'
+					type='button'
+				>
+					<Quote size={16} />
+				</button>
+				<button
+					onClick={() => editor.chain().focus().setHorizontalRule().run()}
+					title='分隔線'
+					type='button'
+				>
+					<Minus size={16} />
+				</button>
+
+				<span className='tiptap-toolbar-divider' />
+
+				{/* 插入 */}
 				<button onClick={setLink} title='插入連結' type='button'>
 					<LinkIcon size={16} />
 				</button>
 				<button onClick={addImage} title='插入圖片' type='button'>
 					<ImageIcon size={16} />
 				</button>
-				<button onClick={() => editor.chain().focus().undo().run()} title='復原' type='button'>
+
+				<span className='tiptap-toolbar-divider' />
+
+				{/* 歷史 */}
+				<button
+					onClick={() => editor.chain().focus().undo().run()}
+					disabled={!editor.can().undo()}
+					title='復原'
+					type='button'
+				>
 					<Undo size={16} />
 				</button>
-				<button onClick={() => editor.chain().focus().redo().run()} title='重做' type='button'>
+				<button
+					onClick={() => editor.chain().focus().redo().run()}
+					disabled={!editor.can().redo()}
+					title='重做'
+					type='button'
+				>
 					<Redo size={16} />
 				</button>
 			</div>
 
 			{/* 編輯區 */}
 			<EditorContent editor={editor} className='tiptap-content' />
+
+			{/* 字數統計 */}
+			<div className='tiptap-footer'>
+				<span>{charCount} 字元</span>
+				<span>{wordCount} 詞</span>
+			</div>
 		</div>
 	);
 }

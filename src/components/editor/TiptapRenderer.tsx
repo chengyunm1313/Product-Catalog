@@ -1,6 +1,6 @@
 /**
  * Tiptap JSON 內容渲染器（Server Component）
- * 將 Tiptap JSON 轉為 HTML 顯示
+ * 將 Tiptap JSON 遞迴轉為 React 元素顯示
  */
 
 import React from 'react';
@@ -22,6 +22,12 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
 						break;
 					case 'italic':
 						text = <em key={`italic-${index}`}>{text}</em>;
+						break;
+					case 'strike':
+						text = <s key={`strike-${index}`}>{text}</s>;
+						break;
+					case 'code':
+						text = <code key={`code-${index}`}>{text}</code>;
 						break;
 					case 'link':
 						text = (
@@ -58,6 +64,18 @@ function renderNode(node: JSONContent, index: number): React.ReactNode {
 			return <ol key={index}>{children}</ol>;
 		case 'listItem':
 			return <li key={index}>{children}</li>;
+		case 'blockquote':
+			return <blockquote key={index}>{children}</blockquote>;
+		case 'codeBlock':
+			return (
+				<pre key={index}>
+					<code>{children}</code>
+				</pre>
+			);
+		case 'horizontalRule':
+			return <hr key={index} />;
+		case 'hardBreak':
+			return <br key={index} />;
 		case 'image':
 			return (
 				// eslint-disable-next-line @next/next/no-img-element
