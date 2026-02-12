@@ -1,0 +1,127 @@
+/* 後台儀表板 */
+.header {
+	margin-bottom: var(--spacing-8);
+}
+.header h1 {
+	font-size: 1.75rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	margin-bottom: var(--spacing-2);
+}
+.header p {
+	color: var(--color-text-secondary);
+	font-size: 0.95rem;
+}
+
+/* 統計卡片 */
+.statsGrid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: var(--spacing-5);
+	margin-bottom: var(--spacing-10);
+}
+@media (max-width: 1024px) {
+	.statsGrid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (max-width: 640px) {
+	.statsGrid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.statCard {
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: var(--spacing-5);
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-4);
+	position: relative;
+}
+.statIcon {
+	font-size: 1.75rem;
+}
+.statInfo {
+	display: flex;
+	flex-direction: column;
+}
+.statLabel {
+	font-size: 0.8rem;
+	color: var(--color-text-secondary);
+	margin-bottom: 2px;
+}
+.statValue {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: var(--color-primary);
+}
+.statChange {
+	position: absolute;
+	top: var(--spacing-3);
+	right: var(--spacing-4);
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: #16a34a;
+	background: #dcfce7;
+	padding: 2px 8px;
+	border-radius: var(--radius-full);
+}
+
+/* 區塊 */
+.section {
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-lg);
+	padding: var(--spacing-6);
+}
+.section h2 {
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: var(--color-primary);
+	margin-bottom: var(--spacing-5);
+}
+
+/* 活動列表 */
+.activityList {
+	display: flex;
+	flex-direction: column;
+}
+.activityItem {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-4);
+	padding: var(--spacing-3) 0;
+	border-bottom: 1px solid var(--color-border);
+}
+.activityItem:last-child {
+	border-bottom: none;
+}
+.activityDot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--color-accent);
+	flex-shrink: 0;
+}
+.activityContent {
+	flex: 1;
+	display: flex;
+	gap: var(--spacing-2);
+}
+.activityAction {
+	font-size: 0.9rem;
+	font-weight: 500;
+	color: var(--color-text);
+}
+.activityTarget {
+	font-size: 0.9rem;
+	color: var(--color-text-secondary);
+}
+.activityTime {
+	font-size: 0.8rem;
+	color: var(--color-text-secondary);
+	white-space: nowrap;
+}

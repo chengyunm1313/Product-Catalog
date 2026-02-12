@@ -1,0 +1,100 @@
+/* 產品詳細頁 */
+.page {
+	padding: var(--spacing-10) 0 var(--spacing-20);
+}
+
+.breadcrumb {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-2);
+	font-size: 0.875rem;
+	color: var(--color-text-secondary);
+	margin-bottom: var(--spacing-10);
+}
+.breadcrumb a {
+	color: var(--color-accent);
+	text-decoration: none;
+}
+.breadcrumb a:hover {
+	text-decoration: underline;
+}
+
+.layout {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--spacing-12);
+	align-items: start;
+}
+@media (max-width: 768px) {
+	.layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* 圖片區 */
+.gallery {
+}
+.mainImage {
+	width: 100%;
+	aspect-ratio: 1;
+	border-radius: var(--radius-lg);
+	overflow: hidden;
+	background: var(--color-bg);
+}
+.placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+}
+.placeholder span {
+	font-size: 5rem;
+	font-weight: 700;
+	color: #fff;
+	opacity: 0.15;
+}
+
+/* 資訊區 */
+.details h1 {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	text-transform: capitalize;
+	margin-bottom: var(--spacing-3);
+}
+.price {
+	font-size: 1.75rem;
+	font-weight: 700;
+	color: var(--color-accent);
+	margin-bottom: var(--spacing-6);
+}
+.desc {
+	font-size: 1rem;
+	line-height: 1.8;
+	color: var(--color-text-secondary);
+	margin-bottom: var(--spacing-8);
+}
+
+/* 規格表 */
+.specs h3 {
+	font-size: 1.125rem;
+	font-weight: 600;
+	margin-bottom: var(--spacing-4);
+	color: var(--color-primary);
+}
+.specs table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.specs td {
+	padding: var(--spacing-3) var(--spacing-4);
+	border-bottom: 1px solid var(--color-border);
+	font-size: 0.9rem;
+}
+.specLabel {
+	font-weight: 600;
+	color: var(--color-text-secondary);
+	width: 120px;
+}

@@ -1,0 +1,164 @@
+/* 關於我們頁面 */
+.page {
+}
+
+/* Hero 區塊 */
+.hero {
+	padding: var(--spacing-20) 0;
+	background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+	text-align: center;
+	color: #fff;
+}
+.hero h1 {
+	font-size: 3rem;
+	font-weight: 700;
+	margin-bottom: var(--spacing-4);
+}
+.hero p {
+	font-size: 1.25rem;
+	line-height: 1.8;
+	opacity: 0.9;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+/* 品牌故事 */
+.story {
+	padding: var(--spacing-20) 0;
+}
+.storyContent {
+	max-width: 720px;
+	margin: 0 auto;
+}
+.storyContent h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	margin-bottom: var(--spacing-6);
+	text-align: center;
+}
+.storyContent p {
+	font-size: 1.05rem;
+	line-height: 1.9;
+	color: var(--color-text-secondary);
+	margin-bottom: var(--spacing-5);
+}
+
+/* 核心價值 */
+.values {
+	padding: var(--spacing-20) 0;
+	background: var(--color-bg);
+}
+.values h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	text-align: center;
+	margin-bottom: var(--spacing-12);
+}
+.valuesGrid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: var(--spacing-8);
+}
+@media (max-width: 1024px) {
+	.valuesGrid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+@media (max-width: 640px) {
+	.valuesGrid {
+		grid-template-columns: 1fr;
+	}
+	.hero h1 {
+		font-size: 2rem;
+	}
+}
+
+.valueCard {
+	text-align: center;
+	padding: var(--spacing-8);
+	background: var(--color-surface);
+	border-radius: var(--radius-lg);
+	border: 1px solid var(--color-border);
+	transition:
+		transform var(--transition-normal),
+		box-shadow var(--transition-normal);
+}
+.valueCard:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-md);
+}
+.valueIcon {
+	font-size: 2.5rem;
+	margin-bottom: var(--spacing-4);
+	display: block;
+}
+.valueCard h3 {
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: var(--color-primary);
+	margin-bottom: var(--spacing-3);
+}
+.valueCard p {
+	font-size: 0.9rem;
+	color: var(--color-text-secondary);
+	line-height: 1.6;
+}
+
+/* 里程碑 */
+.milestones {
+	padding: var(--spacing-20) 0;
+}
+.milestones h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	text-align: center;
+	margin-bottom: var(--spacing-12);
+}
+.timeline {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-8);
+	max-width: 600px;
+	margin: 0 auto;
+}
+.milestone {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-5);
+}
+.year {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--color-accent);
+	min-width: 60px;
+	text-align: right;
+}
+.line {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: var(--color-accent);
+	flex-shrink: 0;
+	position: relative;
+}
+.line::after {
+	content: '';
+	position: absolute;
+	top: 12px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 2px;
+	height: calc(var(--spacing-8) + 0.75rem);
+	background: var(--color-border);
+}
+.milestone:last-child .line::after {
+	display: none;
+}
+.event {
+	font-size: 1rem;
+	color: var(--color-text-secondary);
+	line-height: 1.5;
+}

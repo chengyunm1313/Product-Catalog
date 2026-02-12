@@ -1,0 +1,181 @@
+.header {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	background-color: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(8px);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	max-width: var(--max-width);
+	margin: 0 auto;
+	padding: 0 var(--spacing-md);
+	height: var(--navbar-height);
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+	text-decoration: none;
+	color: var(--color-primary);
+}
+
+.logoIcon {
+	font-size: 1.5rem;
+	color: var(--color-accent);
+}
+
+.logoText {
+	font-family: var(--font-heading);
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.desktopMenu {
+	display: flex;
+	list-style: none;
+	gap: var(--spacing-xl);
+}
+
+.navLink {
+	font-size: 0.9375rem;
+	font-weight: 500;
+	color: var(--color-secondary);
+	text-decoration: none;
+	padding: var(--spacing-sm) 0;
+	position: relative;
+	transition: color var(--transition-fast);
+}
+
+.navLink::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	height: 2px;
+	background-color: var(--color-accent);
+	transition: width var(--transition-normal);
+}
+
+.navLink:hover,
+.navLink.active {
+	color: var(--color-accent);
+}
+
+.navLink.active::after,
+.navLink:hover::after {
+	width: 100%;
+}
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+}
+
+.iconBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: none;
+	border-radius: var(--radius-md);
+	background: transparent;
+	color: var(--color-secondary);
+	cursor: pointer;
+	transition: all var(--transition-fast);
+}
+
+.iconBtn:hover {
+	background-color: var(--color-background);
+	color: var(--color-text);
+}
+
+.menuBtn {
+	composes: iconBtn;
+	display: none;
+}
+
+/* 搜尋列 */
+.searchBar {
+	border-top: 1px solid var(--color-border);
+	padding: var(--spacing-md);
+	background-color: var(--color-surface);
+}
+
+.searchContainer {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+	max-width: 600px;
+	margin: 0 auto;
+	padding: var(--spacing-sm) var(--spacing-md);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-full);
+	background-color: var(--color-background);
+}
+
+.searchIcon {
+	color: var(--color-text-secondary);
+	flex-shrink: 0;
+}
+
+.searchInput {
+	width: 100%;
+	border: none;
+	background: transparent;
+	font-size: 0.9375rem;
+	color: var(--color-text);
+	outline: none;
+}
+
+/* 手機選單 */
+.mobileMenu {
+	display: none;
+	background-color: var(--color-surface);
+	border-top: 1px solid var(--color-border);
+	padding: var(--spacing-md);
+}
+
+.mobileMenu ul {
+	list-style: none;
+}
+
+.mobileLink {
+	display: block;
+	padding: var(--spacing-md);
+	font-size: 1rem;
+	font-weight: 500;
+	color: var(--color-secondary);
+	text-decoration: none;
+	border-radius: var(--radius-md);
+	transition: all var(--transition-fast);
+}
+
+.mobileLink:hover,
+.mobileLink.active {
+	background-color: var(--color-background);
+	color: var(--color-accent);
+}
+
+/* 響應式 */
+@media (max-width: 768px) {
+	.desktopMenu {
+		display: none;
+	}
+
+	.menuBtn {
+		display: flex;
+	}
+
+	.mobileMenu {
+		display: block;
+	}
+}
