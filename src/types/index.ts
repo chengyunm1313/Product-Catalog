@@ -16,6 +16,7 @@ export interface Post {
 	id: string;
 	slug: string;
 	title: string;
+	excerpt: string;
 	status: 'draft' | 'published';
 	contentJson: JSONContent | null;
 	seo: SeoMeta;

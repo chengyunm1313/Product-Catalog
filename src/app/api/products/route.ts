@@ -1,37 +1,53 @@
 /**
  * 產品 API 路由
+ * GET：取得所有產品（後台）或已發布產品（前台）
+ * POST：新增產品
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-
-// 模擬產品資料（正式版接 Firestore）
-const products = [
-	{ id: '1', slug: 'product-a', name: '專業級工業感測器', price: 12800, status: 'published' },
-	{ id: '2', slug: 'product-b', name: '智能控制模組', price: 24500, status: 'published' },
-];
+import { getAllProducts, getPublishedProducts, createProduct } from '@/lib/firestore/products';
 
 export async function GET(request: NextRequest) {
 	const { searchParams } = new URL(request.url);
 	const page = parseInt(searchParams.get('page') || '1');
-	const limit = parseInt(searchParams.get('limit') || '10');
+	const limit = parseInt(searchParams.get('limit') || '12');
+	const admin = searchParams.get('admin') === 'true';
 
-	// TODO: 正式版改接 Firestore
-	return NextResponse.json({
-		success: true,
-		data: products,
-		total: products.length,
-		page,
-		limit,
-	});
+	try {
+		if (admin) {
+			const products = await getAllProducts();
+			return NextResponse.json({ success: true, data: products, total: products.length });
+		}
+
+		const result = await getPublishedProducts(page, limit);
+		return NextResponse.json({ success: true, ...result });
+	} catch (error) {
+		console.error('取得產品失敗:', error);
+		return NextResponse.json({ success: false, error: '取得產品失敗' }, { status: 500 });
+	}
 }
 
 export async function POST(request: NextRequest) {
 	try {
 		const body = await request.json();
 
-		// TODO: 正式版加 auth 驗證 + Firestore 新增
-		return NextResponse.json({ success: true, data: { id: 'new-id', ...body } }, { status: 201 });
-	} catch {
-		return NextResponse.json({ success: false, error: '無效的請求內容' }, { status: 400 });
+		const id = await createProduct({
+			slug: body.slug,
+			name: body.name,
+			descriptionJson: body.descriptionJson || null,
+			price: body.price || 0,
+			sku: body.sku || '',
+			status: body.status || 'draft',
+			images: body.images || [],
+			categoryIds: body.categoryIds || [],
+			tags: body.tags || [],
+			specs: body.specs || {},
+			seo: body.seo || { title: '', description: '' },
+		});
+
+		return NextResponse.json({ success: true, data: { id } }, { status: 201 });
+	} catch (error) {
+		console.error('新增產品失敗:', error);
+		return NextResponse.json({ success: false, error: '新增產品失敗' }, { status: 500 });
 	}
 }

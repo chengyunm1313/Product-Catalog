@@ -1,10 +1,13 @@
 /**
  * 首頁
- * Block-Based 設計，展示 Hero + 精選產品 + 最新文章 + CTA
+ * Block-Based 設計，優先從 Firestore 讀取，fallback 使用預設 blocks
  */
+
+export const dynamic = 'force-dynamic';
 
 import type { Metadata } from 'next';
 import type { BlockData } from '@/types';
+import { getPageBySlug } from '@/lib/firestore/pages';
 import BlockRenderer from '@/components/blocks/BlockRenderer';
 
 export const metadata: Metadata = {
@@ -12,8 +15,8 @@ export const metadata: Metadata = {
 	description: '探索我們的精選產品與最新消息，了解品牌故事。',
 };
 
-// 首頁預設 Blocks（可透過後台管理替換）
-const homeBlocks: BlockData[] = [
+// 首頁預設 Blocks（Firestore 尚無 home 頁時使用）
+const defaultBlocks: BlockData[] = [
 	{
 		type: 'hero',
 		data: {
@@ -50,6 +53,17 @@ const homeBlocks: BlockData[] = [
 	},
 ];
 
-export default function HomePage() {
-	return <BlockRenderer blocks={homeBlocks} />;
+export default async function HomePage() {
+	let blocks = defaultBlocks;
+
+	try {
+		const page = await getPageBySlug('home');
+		if (page?.blocks && page.blocks.length > 0) {
+			blocks = page.blocks;
+		}
+	} catch {
+		// Firestore 讀取失敗時使用預設 blocks
+	}
+
+	return <BlockRenderer blocks={blocks} />;
 }

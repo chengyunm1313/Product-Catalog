@@ -1,9 +1,13 @@
 /**
  * 產品詳細頁
+ * 從 Firestore 根據 slug 取得產品資料
  */
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { getProductBySlug } from '@/lib/firestore/products';
+import TiptapRenderer from '@/components/editor/TiptapRenderer';
 import styles from './detail.module.css';
 
 interface Props {
@@ -12,29 +16,27 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { slug } = await params;
+	const product = await getProductBySlug(slug);
+
+	if (!product) {
+		return { title: '找不到產品 — Brand' };
+	}
+
 	return {
-		title: `${slug} — 產品詳情 | Brand`,
-		description: `查看 ${slug} 的詳細規格與介紹。`,
+		title: product.seo?.title || `${product.name} — Brand`,
+		description: product.seo?.description || `查看 ${product.name} 的詳細規格與介紹。`,
 	};
 }
 
 export default async function ProductDetailPage({ params }: Props) {
 	const { slug } = await params;
+	const product = await getProductBySlug(slug);
 
-	// TODO: 從 Firestore 撈取真實產品資料
-	const product = {
-		name: slug.replace(/-/g, ' '),
-		description:
-			'這是一款高品質的產品，採用先進技術製造，適用於各種專業場景。我們嚴格把關每一個生產環節，確保產品品質達到最高標準。',
-		price: 12800,
-		specs: [
-			{ label: '型號', value: 'XX-100' },
-			{ label: '尺寸', value: '120 x 80 x 45 mm' },
-			{ label: '重量', value: '350g' },
-			{ label: '工作溫度', value: '-20°C ~ 60°C' },
-			{ label: '防護等級', value: 'IP65' },
-		],
-	};
+	if (!product) {
+		notFound();
+	}
+
+	const specEntries = product.specs ? Object.entries(product.specs) : [];
 
 	return (
 		<section className={styles.page}>
@@ -51,9 +53,18 @@ export default async function ProductDetailPage({ params }: Props) {
 					{/* 產品圖片 */}
 					<div className={styles.gallery}>
 						<div className={styles.mainImage}>
-							<div className={styles.placeholder}>
-								<span>{product.name[0]?.toUpperCase()}</span>
-							</div>
+							{product.images && product.images[0] ? (
+								// eslint-disable-next-line @next/next/no-img-element
+								<img
+									src={product.images[0]}
+									alt={product.name}
+									style={{ width: '100%', borderRadius: '12px' }}
+								/>
+							) : (
+								<div className={styles.placeholder}>
+									<span>{product.name[0]?.toUpperCase()}</span>
+								</div>
+							)}
 						</div>
 					</div>
 
@@ -61,21 +72,54 @@ export default async function ProductDetailPage({ params }: Props) {
 					<div className={styles.details}>
 						<h1>{product.name}</h1>
 						<div className={styles.price}>NT$ {product.price.toLocaleString()}</div>
-						<p className={styles.desc}>{product.description}</p>
 
-						<div className={styles.specs}>
-							<h3>產品規格</h3>
-							<table>
-								<tbody>
-									{product.specs.map((spec) => (
-										<tr key={spec.label}>
-											<td className={styles.specLabel}>{spec.label}</td>
-											<td>{spec.value}</td>
-										</tr>
-									))}
-								</tbody>
-							</table>
+						{product.sku && (
+							<p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem' }}>
+								SKU: {product.sku}
+							</p>
+						)}
+
+						{/* 產品描述（Tiptap 渲染） */}
+						<div className={styles.desc}>
+							<TiptapRenderer content={product.descriptionJson} />
 						</div>
+
+						{/* 產品規格 */}
+						{specEntries.length > 0 && (
+							<div className={styles.specs}>
+								<h3>產品規格</h3>
+								<table>
+									<tbody>
+										{specEntries.map(([label, value]) => (
+											<tr key={label}>
+												<td className={styles.specLabel}>{label}</td>
+												<td>{value}</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						)}
+
+						{/* 標籤 */}
+						{product.tags && product.tags.length > 0 && (
+							<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '1rem' }}>
+								{product.tags.map((tag) => (
+									<span
+										key={tag}
+										style={{
+											background: 'var(--color-surface)',
+											padding: '0.25rem 0.75rem',
+											borderRadius: '999px',
+											fontSize: '0.8rem',
+											color: 'var(--color-text-secondary)',
+										}}
+									>
+										{tag}
+									</span>
+								))}
+							</div>
+						)}
 
 						<button className='btn btn-primary' style={{ marginTop: '1.5rem' }}>
 							聯絡詢價

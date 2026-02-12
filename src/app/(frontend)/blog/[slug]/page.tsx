@@ -1,9 +1,13 @@
 /**
  * 部落格文章詳情頁
+ * 從 Firestore 根據 slug 取得文章內容，用 TiptapRenderer 渲染
  */
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { getPostBySlug } from '@/lib/firestore/posts';
+import TiptapRenderer from '@/components/editor/TiptapRenderer';
 import styles from './article.module.css';
 
 interface Props {
@@ -12,15 +16,25 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { slug } = await params;
+	const post = await getPostBySlug(slug);
+
+	if (!post) {
+		return { title: '找不到文章 — Brand' };
+	}
+
 	return {
-		title: `${slug.replace(/-/g, ' ')} — 部落格 | Brand`,
-		description: `閱讀文章：${slug.replace(/-/g, ' ')}`,
+		title: post.seo?.title || `${post.title} — 部落格 | Brand`,
+		description: post.seo?.description || `閱讀文章：${post.title}`,
 	};
 }
 
 export default async function BlogArticlePage({ params }: Props) {
 	const { slug } = await params;
-	const title = slug.replace(/-/g, ' ');
+	const post = await getPostBySlug(slug);
+
+	if (!post) {
+		notFound();
+	}
 
 	return (
 		<article className={styles.page}>
@@ -30,37 +44,52 @@ export default async function BlogArticlePage({ params }: Props) {
 					<span>/</span>
 					<Link href='/blog'>部落格</Link>
 					<span>/</span>
-					<span>{title}</span>
+					<span>{post.title}</span>
 				</nav>
 
 				<header className={styles.header}>
 					<div className={styles.meta}>
-						<time>2025-01-15</time>
+						<time>
+							{post.createdAt ? new Date(post.createdAt).toLocaleDateString('zh-TW') : ''}
+						</time>
 						<span className={styles.dot}>·</span>
-						<span>5 分鐘閱讀</span>
+						<span>{post.author}</span>
 					</div>
-					<h1>{title}</h1>
-					<p className={styles.excerpt}>深入探討相關主題的最新趨勢與觀點，帶您了解產業動態。</p>
+					<h1>{post.title}</h1>
+
+					{post.tags && post.tags.length > 0 && (
+						<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.5rem' }}>
+							{post.tags.map((tag) => (
+								<span
+									key={tag}
+									style={{
+										background: 'var(--color-surface)',
+										padding: '0.25rem 0.75rem',
+										borderRadius: '999px',
+										fontSize: '0.8rem',
+										color: 'var(--color-primary)',
+									}}
+								>
+									{tag}
+								</span>
+							))}
+						</div>
+					)}
 				</header>
 
+				{/* 封面圖 */}
+				{post.coverImage && (
+					// eslint-disable-next-line @next/next/no-img-element
+					<img
+						src={post.coverImage}
+						alt={post.title}
+						style={{ width: '100%', borderRadius: '12px', marginBottom: '2rem' }}
+					/>
+				)}
+
+				{/* 文章內容：Tiptap JSON 渲染 */}
 				<div className={styles.body}>
-					<p>
-						這是一篇示範文章的內容。在正式版本中，此處將由 Tiptap 渲染器 根據儲存在 Firestore 的
-						JSON 內容動態產生。
-					</p>
-					<h2>章節標題</h2>
-					<p>
-						我們致力於提供最高品質的產品與服務。透過不斷的技術創新和品質改進，
-						我們在業界建立了卓越的聲譽。以下將詳細說明我們的核心技術優勢。
-					</p>
-					<h3>技術細節</h3>
-					<p>
-						採用先進的製造工藝和嚴格的品質管控流程，每一件產品都經過多道
-						自動化檢測工序，確保符合國際標準。
-					</p>
-					<blockquote>
-						<p>品質不是偶然，而是持續追求卓越的結果。</p>
-					</blockquote>
+					<TiptapRenderer content={post.contentJson} />
 				</div>
 
 				<footer className={styles.footer}>
