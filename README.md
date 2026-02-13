@@ -72,7 +72,7 @@ Product Catalog/
 ### 1. Clone 專案
 
 ```bash
-git clone https://github.com/<your-username>/product-catalog.git
+git clone https://github.com/chengyunm1313/product-catalog.git
 cd product-catalog
 ```
 
