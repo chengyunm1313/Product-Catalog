@@ -1,26 +1,59 @@
 /**
  * 前台導航列
+ * 動態載入後台已發佈頁面至選單
  */
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Search } from 'lucide-react';
 import styles from './Navbar.module.css';
 
-const navLinks = [
+/** 固定導航項目 */
+const staticLinks = [
 	{ href: '/', label: '首頁' },
 	{ href: '/products', label: '產品' },
 	{ href: '/blog', label: '部落格' },
 	{ href: '/about', label: '關於我們' },
 ];
 
+interface NavPage {
+	slug: string;
+	title: string;
+}
+
 export default function Navbar() {
 	const pathname = usePathname();
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [searchOpen, setSearchOpen] = useState(false);
+	const [dynamicPages, setDynamicPages] = useState<NavPage[]>([]);
+
+	// 載入後台已發佈的動態頁面
+	useEffect(() => {
+		async function fetchNavPages() {
+			try {
+				const res = await fetch('/api/pages/nav');
+				const data = await res.json();
+				if (data.success && Array.isArray(data.items)) {
+					setDynamicPages(data.items);
+				}
+			} catch {
+				// 靜默失敗，僅顯示靜態連結
+			}
+		}
+		fetchNavPages();
+	}, []);
+
+	// 合併靜態 + 動態連結
+	const allLinks = [
+		...staticLinks,
+		...dynamicPages.map((p) => ({
+			href: `/${p.slug}`,
+			label: p.title,
+		})),
+	];
 
 	return (
 		<header className={styles.header}>
@@ -32,7 +65,7 @@ export default function Navbar() {
 
 				{/* 桌面導航 */}
 				<ul className={styles.desktopMenu}>
-					{navLinks.map((link) => (
+					{allLinks.map((link) => (
 						<li key={link.href}>
 							<Link
 								href={link.href}
@@ -81,7 +114,7 @@ export default function Navbar() {
 			{mobileMenuOpen && (
 				<div className={styles.mobileMenu}>
 					<ul>
-						{navLinks.map((link) => (
+						{allLinks.map((link) => (
 							<li key={link.href}>
 								<Link
 									href={link.href}

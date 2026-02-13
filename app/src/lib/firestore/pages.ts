@@ -22,6 +22,20 @@ export async function getPageBySlug(slug: string): Promise<Page | null> {
 	return { id: doc.id, ...doc.data() } as Page;
 }
 
+/** 取得所有已發佈頁面（前台導航用） */
+export async function getPublishedPages(): Promise<Pick<Page, 'slug' | 'title'>[]> {
+	const snapshot = await adminDb.collection(COLLECTION).where('status', '==', 'published').get();
+
+	return snapshot.docs
+		.map((doc) => ({
+			slug: doc.data().slug as string,
+			title: doc.data().title as string,
+			createdAt: doc.data().createdAt as string,
+		}))
+		.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+		.map(({ slug, title }) => ({ slug, title }));
+}
+
 /** 取得所有頁面（後台用） */
 export async function getAllPages(): Promise<Page[]> {
 	const snapshot = await adminDb.collection(COLLECTION).orderBy('updatedAt', 'desc').get();

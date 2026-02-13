@@ -445,10 +445,286 @@ const seedPosts = [
 	},
 ];
 
+const seedPages = [
+	{
+		slug: 'services',
+		title: '服務項目',
+		status: 'published',
+		blocks: [
+			{
+				type: 'hero',
+				data: {
+					title: '專業服務',
+					subtitle: '從規劃到售後，全方位的技術服務支援',
+					images: [],
+					buttonText: '聯絡我們',
+					buttonLink: '/contact-us',
+				},
+			},
+			{
+				type: 'richText',
+				data: {
+					contentJson: {
+						type: 'doc',
+						content: [
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: '技術諮詢' }],
+							},
+							{
+								type: 'paragraph',
+								content: [
+									{
+										type: 'text',
+										text: '我們的專業團隊提供免費的初步技術諮詢，協助您評估需求、選擇最適合的解決方案。無論是新廠規劃或既有產線升級，都能為您量身打造最佳方案。',
+									},
+								],
+							},
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: '系統整合' }],
+							},
+							{
+								type: 'paragraph',
+								content: [
+									{
+										type: 'text',
+										text: '從感測器布署、控制模組安裝到 SCADA 系統整合，提供一站式的系統整合服務。確保各元件間的完美協作，發揮系統最大效能。',
+									},
+								],
+							},
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: '教育訓練' }],
+							},
+							{
+								type: 'paragraph',
+								content: [
+									{
+										type: 'text',
+										text: '提供完整的操作訓練課程，包含設備操作、日常維護、故障排除等內容。確保您的團隊能夠獨立操作與維護設備。',
+									},
+								],
+							},
+						],
+					},
+				},
+			},
+		],
+		seo: {
+			title: '服務項目 — Brand',
+			description: '從規劃到售後，全方位的技術服務支援。',
+		},
+	},
+	{
+		slug: 'faq',
+		title: '常見問題',
+		status: 'published',
+		blocks: [
+			{
+				type: 'hero',
+				data: {
+					title: '常見問題',
+					subtitle: '快速找到您需要的答案',
+					images: [],
+					buttonText: '',
+					buttonLink: '',
+				},
+			},
+			{
+				type: 'richText',
+				data: {
+					contentJson: {
+						type: 'doc',
+						content: [
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: 'Q：產品保固期有多長？' }],
+							},
+							{
+								type: 'paragraph',
+								content: [
+									{
+										type: 'text',
+										text: 'A：標準產品均提供兩年保固。保固期間內如有非人為因素造成的故障，我們將免費維修或更換。',
+									},
+								],
+							},
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: 'Q：可以客製化產品嗎？' }],
+							},
+							{
+								type: 'paragraph',
+								content: [
+									{
+										type: 'text',
+										text: 'A：是的，我們提供客製化服務。請透過聯絡表單提出需求，我們的技術團隊會在 3 個工作天內回覆評估結果。',
+									},
+								],
+							},
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: 'Q：是否提供現場安裝服務？' }],
+							},
+							{
+								type: 'paragraph',
+								content: [
+									{
+										type: 'text',
+										text: 'A：是的，我們在全台各地均有配合的服務據點。大型系統整合專案提供免費現場安裝與調試，獨立產品則提供付費到府安裝服務。',
+									},
+								],
+							},
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: 'Q：如何取得技術支援？' }],
+							},
+							{
+								type: 'paragraph',
+								content: [
+									{
+										type: 'text',
+										text: 'A：您可以透過客服專線（02-2345-6789）、Email (support@brand.com) 或官網聯絡表單聯繫我們。工作日 9:00-18:00 提供即時技術支援。',
+									},
+								],
+							},
+						],
+					},
+				},
+			},
+		],
+		seo: {
+			title: '常見問題 — Brand',
+			description: '關於產品保固、客製化與技術支援的常見問題解答。',
+		},
+	},
+	{
+		slug: 'contact-us',
+		title: '聯絡我們',
+		status: 'published',
+		blocks: [
+			{
+				type: 'hero',
+				data: {
+					title: '聯絡我們',
+					subtitle: '我們期待為您提供最佳的服務體驗',
+					images: [],
+					buttonText: '',
+					buttonLink: '',
+				},
+			},
+			{
+				type: 'richText',
+				data: {
+					contentJson: {
+						type: 'doc',
+						content: [
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: '聯絡方式' }],
+							},
+							{
+								type: 'bulletList',
+								content: [
+									{
+										type: 'listItem',
+										content: [
+											{
+												type: 'paragraph',
+												content: [
+													{ type: 'text', marks: [{ type: 'bold' }], text: '電話：' },
+													{ type: 'text', text: '02-2345-6789' },
+												],
+											},
+										],
+									},
+									{
+										type: 'listItem',
+										content: [
+											{
+												type: 'paragraph',
+												content: [
+													{ type: 'text', marks: [{ type: 'bold' }], text: 'Email：' },
+													{ type: 'text', text: 'info@brand.com' },
+												],
+											},
+										],
+									},
+									{
+										type: 'listItem',
+										content: [
+											{
+												type: 'paragraph',
+												content: [
+													{ type: 'text', marks: [{ type: 'bold' }], text: '地址：' },
+													{
+														type: 'text',
+														text: '10667 台北市大安區敦化南路二段 100 號 12 樓',
+													},
+												],
+											},
+										],
+									},
+								],
+							},
+							{
+								type: 'heading',
+								attrs: { level: 2 },
+								content: [{ type: 'text', text: '營業時間' }],
+							},
+							{
+								type: 'paragraph',
+								content: [
+									{
+										type: 'text',
+										text: '週一至週五 09:00 — 18:00（國定假日休息）',
+									},
+								],
+							},
+						],
+					},
+				},
+			},
+			{
+				type: 'customCTA',
+				data: {
+					title: '需要報價？',
+					description: '填寫需求表單，我們將在 24 小時內回覆您的詢問。',
+					buttonText: '填寫需求單',
+					buttonLink: 'mailto:info@brand.com',
+				},
+			},
+		],
+		seo: {
+			title: '聯絡我們 — Brand',
+			description: '電話、Email、地址與營業時間，歡迎與我們聯繫。',
+		},
+	},
+];
+
 export async function POST() {
 	try {
-		const batch = adminDb.batch();
 		const now = new Date().toISOString();
+
+		// 先清除舊資料，避免重複
+		const collections = ['products', 'posts', 'pages'];
+		for (const col of collections) {
+			const snapshot = await adminDb.collection(col).get();
+			const delBatch = adminDb.batch();
+			snapshot.docs.forEach((doc) => delBatch.delete(doc.ref));
+			if (!snapshot.empty) await delBatch.commit();
+		}
+
+		const batch = adminDb.batch();
 
 		// 寫入產品
 		for (const product of seedProducts) {
@@ -462,11 +738,17 @@ export async function POST() {
 			batch.set(ref, { ...post, createdAt: now, updatedAt: now });
 		}
 
+		// 寫入頁面
+		for (const page of seedPages) {
+			const ref = adminDb.collection('pages').doc();
+			batch.set(ref, { ...page, createdAt: now, updatedAt: now });
+		}
+
 		await batch.commit();
 
 		return NextResponse.json({
 			success: true,
-			message: `已寫入 ${seedProducts.length} 筆產品、${seedPosts.length} 篇文章`,
+			message: `已寫入 ${seedProducts.length} 筆產品、${seedPosts.length} 篇文章、${seedPages.length} 個頁面`,
 		});
 	} catch (error) {
 		console.error('Seed 失敗:', error);

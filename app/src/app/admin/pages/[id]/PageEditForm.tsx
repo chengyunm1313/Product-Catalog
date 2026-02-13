@@ -10,7 +10,7 @@ import Link from 'next/link';
 import type { JSONContent } from '@tiptap/react';
 import TiptapEditor from '@/components/editor/TiptapEditor';
 import type { Page } from '@/types';
-import styles from '../../../form.module.css';
+import styles from '../../form.module.css';
 
 /** 從 blocks 陣列中取得 richText 的 contentJson */
 function extractContentFromBlocks(blocks: Page['blocks']): JSONContent {
